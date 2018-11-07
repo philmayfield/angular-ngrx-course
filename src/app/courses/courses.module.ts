@@ -1,31 +1,32 @@
-import {ModuleWithProviders, NgModule} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {HomeComponent} from "./home/home.component";
-import {CoursesCardListComponent} from "./courses-card-list/courses-card-list.component";
-import {CourseDialogComponent} from "./course-dialog/course-dialog.component";
-import {CourseResolver} from "./services/course.resolver";
-import {CoursesService} from "./services/courses.service";
-import {CourseComponent} from "./course/course.component";
+import {HomeComponent} from './home/home.component';
+import {CoursesCardListComponent} from './courses-card-list/courses-card-list.component';
+import {CourseDialogComponent} from './course-dialog/course-dialog.component';
+import {CourseResolver} from './services/course.resolver';
+import {CoursesService} from './services/courses.service';
+import {CourseComponent} from './course/course.component';
 import {
     MatDatepickerModule,
     MatDialogModule, MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, MatSelectModule,
     MatSlideToggleModule,
     MatSortModule, MatTableModule
-} from "@angular/material";
-import {MatTabsModule} from "@angular/material/tabs";
-import {ReactiveFormsModule} from "@angular/forms";
-import {MatMenuModule} from "@angular/material/menu";
-import {MatMomentDateModule} from "@angular/material-moment-adapter";
-import {MatCardModule} from "@angular/material/card";
-import {MatButtonModule} from "@angular/material/button";
-import {MatIconModule} from "@angular/material/icon";
-import {RouterModule, Routes} from "@angular/router";
-
-
+} from '@angular/material';
+import {MatTabsModule} from '@angular/material/tabs';
+import {ReactiveFormsModule} from '@angular/forms';
+import {MatMomentDateModule} from '@angular/material-moment-adapter';
+import {MatCardModule} from '@angular/material/card';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import {RouterModule, Routes} from '@angular/router';
+import {EffectsModule} from '@ngrx/effects';
+import {CoursesEffects} from './courses.effects';
+import {StoreModule} from '@ngrx/store';
+import {coursesReducer} from './courses.reducer';
 
 export const coursesRoutes: Routes = [
     {
-        path: "",
+        path: '',
         component: HomeComponent
 
     },
@@ -37,8 +38,6 @@ export const coursesRoutes: Routes = [
         }
     }
 ];
-
-
 
 @NgModule({
     imports: [
@@ -58,7 +57,9 @@ export const coursesRoutes: Routes = [
         MatDatepickerModule,
         MatMomentDateModule,
         ReactiveFormsModule,
-        RouterModule.forChild(coursesRoutes)
+        RouterModule.forChild(coursesRoutes),
+        StoreModule.forFeature('courses', coursesReducer),
+        EffectsModule.forFeature([CoursesEffects])
     ],
     declarations: [HomeComponent, CoursesCardListComponent, CourseDialogComponent, CourseComponent],
     exports: [HomeComponent, CoursesCardListComponent, CourseDialogComponent, CourseComponent],

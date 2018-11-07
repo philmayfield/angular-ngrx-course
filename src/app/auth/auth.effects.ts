@@ -13,8 +13,7 @@ export class AuthEffects {
   login$ = this.actions$.pipe(
     ofType<Login>(AuthActionTypes.LoginAction),
     tap(action => {
-      console.log('action', action);
-      localStorage.setItem('user', JSON.stringify(action.payload.user))
+      localStorage.setItem('user', JSON.stringify(action.payload.user));
     })
   );
 
@@ -28,10 +27,10 @@ export class AuthEffects {
   );
 
   @Effect()
-  init$ = defer<Login | Logout>(() => {
+  init$ = defer((): any => {
     const userData = localStorage.getItem('user');
 
-    if (userData) {
+    if (userData && userData !== 'undefined') {
       return of(new Login(JSON.parse(userData)));
     }
 
