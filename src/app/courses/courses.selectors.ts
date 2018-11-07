@@ -23,6 +23,11 @@ export const selectBeginnerCourses = createSelector(
   courses => courses.filter(course => course.category === 'BEGINNER')
 );
 
+export const selectIntermediateCourses = createSelector(
+  selectAllCourses,
+  courses => courses.filter(course => course.category === 'INTERMEDIATE')
+);
+
 export const selectAdvancedCourses = createSelector(
   selectAllCourses,
   courses => courses.filter(course => course.category === 'ADVANCED')

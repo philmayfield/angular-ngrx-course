@@ -3,8 +3,10 @@ import {Course} from '../model/course';
 import {Observable} from 'rxjs';
 import {select, Store} from '@ngrx/store';
 import {AppState} from '../../reducers';
-import {selectAdvancedCourses, selectBeginnerCourses, selectPromoCourses} from '../courses.selectors';
+import {selectAdvancedCourses, selectBeginnerCourses, selectIntermediateCourses, selectPromoCourses} from '../courses.selectors';
 import {AllCoursesRequested} from '../courses.actions';
+import {tap} from 'rxjs/operators';
+import {getAppInitializer} from '@angular/router/src/router_module';
 
 @Component({
     selector: 'home',
@@ -16,6 +18,9 @@ export class HomeComponent implements OnInit {
   promoTotal$: Observable<number>;
 
   beginnerCourses$: Observable<Course[]>;
+  hasBeginnerCourses = false;
+
+  intermediateCourses$: Observable<Course[]>;
 
   advancedCourses$: Observable<Course[]>;
 
@@ -28,7 +33,14 @@ export class HomeComponent implements OnInit {
     this.store.dispatch(new AllCoursesRequested());
 
     this.beginnerCourses$ = this.store.pipe(
-      select(selectBeginnerCourses)
+      select(selectBeginnerCourses),
+      tap((courses) => {
+        this.hasBeginnerCourses = courses.length > 0;
+      })
+    );
+
+    this.intermediateCourses$ = this.store.pipe(
+      select(selectIntermediateCourses)
     );
 
     this.advancedCourses$ = this.store.pipe(

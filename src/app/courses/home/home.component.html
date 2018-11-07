@@ -18,6 +18,15 @@
 
         </mat-tab>
 
+        <mat-tab label="Intermediate">
+
+            <courses-card-list
+                    [courses]="intermediateCourses$ | async">
+
+            </courses-card-list>
+
+        </mat-tab>
+
         <mat-tab label="Advanced">
 
             <courses-card-list
