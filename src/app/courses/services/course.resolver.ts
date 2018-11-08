@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {Course} from '../model/course';
 import {Observable} from 'rxjs';
-import {CoursesService} from './courses.service';
 import {select, Store} from '@ngrx/store';
 import {AppState} from '../../reducers';
 import {selectCourseById} from '../courses.selectors';
@@ -10,12 +9,10 @@ import {filter, first, tap} from 'rxjs/operators';
 import {CourseRequested} from '../courses.actions';
 
 
-
 @Injectable()
 export class CourseResolver implements Resolve<Course> {
 
   constructor(
-    // private coursesService: CoursesService,
     private store: Store<AppState>
   ) {}
 

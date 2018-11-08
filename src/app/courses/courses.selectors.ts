@@ -2,8 +2,13 @@ import {createFeatureSelector, createSelector} from '@ngrx/store';
 import {CoursesState} from './courses.reducer';
 
 import * as fromCourse from './courses.reducer';
+import * as fromLesson from './lessons.reducer';
+import {PageQuery} from './courses.actions';
+import {LessonsState} from './lessons.reducer';
 
 export const selectCoursesState = createFeatureSelector<CoursesState>('courses');
+
+export const selectLessonsState = createFeatureSelector<LessonsState>('lessons');
 
 export const selectCourseById = (courseId: number) => createSelector(
   selectCoursesState,
@@ -45,3 +50,28 @@ export const allCoursesLoaded = createSelector(
     return coursesState.allCoursesLoaded;
   }
 );
+
+export const selectAllLessons = createSelector(
+  selectLessonsState,
+  fromLesson.selectAll
+);
+
+export const selectLessonsPage = (courseId: number, page: PageQuery) => {
+  return createSelector(
+    selectAllLessons,
+    allLessons => {
+
+      const start = page.pageIndex * page.pageSize;
+      const end = start + page.pageSize;
+
+      const filteredLessons = allLessons
+        .filter(lesson => lesson.courseId === courseId)
+        .slice(start, end);
+
+      console.log('filteredLessons', filteredLessons);
+
+      return filteredLessons;
+
+    }
+  );
+};
