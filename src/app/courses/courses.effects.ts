@@ -1,6 +1,13 @@
 import {Injectable} from '@angular/core';
 import {Actions, Effect, ofType} from '@ngrx/effects';
-import {AllCoursesLoaded, AllCoursesRequested, CourseActionTypes, CourseLoaded, CourseRequested} from './courses.actions';
+import {
+  AllCoursesLoaded,
+  AllCoursesRequested,
+  CourseActionTypes,
+  CourseLoaded,
+  CourseRequested, LessonsPageLoaded,
+  LessonsPageRequested
+} from './courses.actions';
 import {filter, map, mergeMap, withLatestFrom} from 'rxjs/operators';
 import {CoursesService} from './services/courses.service';
 import {select, Store} from '@ngrx/store';
@@ -42,6 +49,23 @@ export class CoursesEffects {
     map(courses => {
       // console.log('courses', courses);
       return new AllCoursesLoaded({courses});
+    })
+  );
+
+  @Effect()
+  loadLessonsPage$ = this.actions$.pipe(
+    ofType<LessonsPageRequested>(CourseActionTypes.LessonsPageRequested),
+    mergeMap(({payload}) => {
+      console.log('payload', payload);
+      return this.coursesService.findLessons(
+        payload.courseId,
+        payload.page.pageIndex,
+        payload.page.pageSize
+      );
+    }),
+    map(lessons => {
+      console.log('lessons', lessons);
+      return new LessonsPageLoaded({ lessons });
     })
   );
 

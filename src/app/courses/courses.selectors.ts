@@ -75,3 +75,8 @@ export const selectLessonsPage = (courseId: number, page: PageQuery) => {
     }
   );
 };
+
+export const selectLessonsLoading = createSelector(
+  selectLessonsState,
+  lessonsState => lessonsState.loading
+);
