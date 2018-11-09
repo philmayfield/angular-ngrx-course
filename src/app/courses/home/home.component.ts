@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {Course} from '../model/course';
 import {Observable} from 'rxjs';
 import {select, Store} from '@ngrx/store';
@@ -6,12 +6,12 @@ import {AppState} from '../../reducers';
 import {selectAdvancedCourses, selectBeginnerCourses, selectIntermediateCourses, selectPromoCourses} from '../courses.selectors';
 import {AllCoursesRequested} from '../courses.actions';
 import {tap} from 'rxjs/operators';
-import {getAppInitializer} from '@angular/router/src/router_module';
 
 @Component({
-    selector: 'home',
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.css']
+  selector: 'home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent implements OnInit {
 

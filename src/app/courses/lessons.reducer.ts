@@ -6,16 +6,22 @@ export interface LessonsState extends EntityState<Lesson> {
   loading: boolean;
 }
 
-export const adapter: EntityAdapter<Lesson> = createEntityAdapter<Lesson>({
+const lessonsAdapter: EntityAdapter<Lesson> = createEntityAdapter<Lesson>({
   sortComparer: sortByCourseAndSeqNo
 });
 
-const initialLessonState = adapter.getInitialState({
+const initialLessonState = lessonsAdapter.getInitialState({
   loading: false
 });
 
 export function lessonsReducer(state = initialLessonState, action: CoursesActions): LessonsState {
   switch (action.type) {
+
+    case CourseActionTypes.LessonsPageCancelled:
+      return {
+        ...state,
+        loading: false
+      };
 
     case CourseActionTypes.LessonsPageRequested:
       return {
@@ -24,7 +30,10 @@ export function lessonsReducer(state = initialLessonState, action: CoursesAction
       };
 
     case CourseActionTypes.LessonsPageLoaded:
-      return adapter.addMany(action.payload.lessons, { ...state, loading: false });
+      return lessonsAdapter.addMany(
+        action.payload.lessons,
+        { ...state, loading: false }
+        );
 
     default:
       return state;
@@ -36,7 +45,7 @@ export const {
   selectEntities,
   selectIds,
   selectTotal
-} = adapter.getSelectors();
+} = lessonsAdapter.getSelectors();
 
 
 

@@ -5,15 +5,15 @@ import {
   AllCoursesRequested,
   CourseActionTypes,
   CourseLoaded,
-  CourseRequested, LessonsPageLoaded,
+  CourseRequested, LessonsPageCancelled, LessonsPageLoaded,
   LessonsPageRequested
 } from './courses.actions';
-import {filter, map, mergeMap, withLatestFrom} from 'rxjs/operators';
+import {catchError, filter, map, mergeMap, withLatestFrom} from 'rxjs/operators';
 import {CoursesService} from './services/courses.service';
 import {select, Store} from '@ngrx/store';
 import {allCoursesLoaded} from './courses.selectors';
 import {CoursesState} from './courses.reducer';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 
 
 @Injectable()
@@ -55,12 +55,20 @@ export class CoursesEffects {
   @Effect()
   loadLessonsPage$ = this.actions$.pipe(
     ofType<LessonsPageRequested>(CourseActionTypes.LessonsPageRequested),
-    mergeMap(({payload}) => {
+    mergeMap(({ payload }) => {
       console.log('payload', payload);
       return this.coursesService.findLessons(
         payload.courseId,
         payload.page.pageIndex,
         payload.page.pageSize
+      ).pipe(
+
+        catchError(err => {
+          console.log('error loading lessons', err);
+          this.store.dispatch(new LessonsPageCancelled());
+          return of([]);
+        })
+
       );
     }),
     map(lessons => {

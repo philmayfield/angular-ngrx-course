@@ -6,9 +6,9 @@ export interface CoursesState extends EntityState<Course> {
   allCoursesLoaded: boolean;
 }
 
-export const adapter: EntityAdapter<Course> = createEntityAdapter<Course>();
+const coursesAdapter: EntityAdapter<Course> = createEntityAdapter<Course>();
 
-export const initialCoursesState: CoursesState = adapter.getInitialState({
+const initialCoursesState: CoursesState = coursesAdapter.getInitialState({
   allCoursesLoaded: false
 });
 
@@ -16,13 +16,13 @@ export function coursesReducer(state = initialCoursesState, action: CoursesActio
 
   switch (action.type) {
     case CourseActionTypes.CourseLoaded:
-      return adapter.addOne(action.payload.course, state);
+      return coursesAdapter.addOne(action.payload.course, state);
 
     case CourseActionTypes.AllCoursesLoaded:
-      return adapter.addAll(action.payload.courses, {...state, allCoursesLoaded: true});
+      return coursesAdapter.addAll(action.payload.courses, {...state, allCoursesLoaded: true});
 
     case CourseActionTypes.CourseSaved:
-      return adapter.updateOne(action.payload.course, state);
+      return coursesAdapter.updateOne(action.payload.course, state);
 
     default:
       return state;
@@ -35,4 +35,4 @@ export const {
   selectEntities,
   selectIds,
   selectTotal
-} = adapter.getSelectors();
+} = coursesAdapter.getSelectors();
